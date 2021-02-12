@@ -1,0 +1,15 @@
+{
+    "frames": {
+      "exampleFrame1.png": {
+        "frame": {"x":4, "y":60, "w":30, "h":60},
+        "rotated": false,
+        "trimmed": false,
+        "spriteSourceSize": {"x":0, "y":0, "w":100, "h":100},
+        "sourceSize": {"w": 100, "h": 100}
+      }
+    },
+  
+    "meta": {
+      "image": "./aladdin.gif"
+    }
+  }
