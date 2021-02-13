@@ -1,4 +1,3 @@
-   
 const baseURL = 'src/'
 
 const images = [
@@ -19,30 +18,6 @@ const images = [
         source : 'assets/bomb.png'
     }
 ]
-    
-const spritesheet = [
-    {
-        name = 'dude',
-        source = 'assets/dude.png',
-        size = {
-            frameWidth: 32, 
-            frameHeight: 48
-        }
-    }
-]
-
-
-const loadAssets = (images, spritesheet, baseURL) =>{
-    this.load.setBaseURL(baseURL)
-
-    images.map(image => {
-        this.load.image(image.name, image.source);
-    })
-
-    spritesheet.map(sprites => {
-        this.load.spritesheet(sprites.name, sprites.source, sprites.size);
-    })
-}
 
     var config = {
         type: Phaser.AUTO,
@@ -70,13 +45,12 @@ const loadAssets = (images, spritesheet, baseURL) =>{
 
     function preload ()
     {
-        // this.load.setBaseURL('src/')
-        // this.load.image('sky', 'assets/sky.png');
-        // this.load.image('ground', 'assets/platform.png');
-        // this.load.image('star', 'assets/star.png');
-        // this.load.image('bomb', 'assets/bomb.png');
-        // this.load.spritesheet('dude', 'assets/dude.png', { frameWidth: 32, frameHeight: 48 });
-        loadAssets(images, spritesheet, baseURL)
+        this.load.setBaseURL(baseURL)
+        images.map(image => {
+            this.load.image(image.name, image.source);
+        })
+    
+        this.load.atlas('aladdin', 'assets/aladdinSpritesheet.png', 'assets/aladdin.json')
     }
 
     function create ()
@@ -84,34 +58,26 @@ const loadAssets = (images, spritesheet, baseURL) =>{
         this.add.image(400, 300, 'sky');
 
         platforms = this.physics.add.staticGroup();
-
         platforms.create(400, 568, 'ground').setScale(2).refreshBody();
-
         platforms.create(600, 400, 'ground');
         platforms.create(50, 250, 'ground');
         platforms.create(750, 220, 'ground');
 
-        player = this.physics.add.sprite(100, 450, 'dude');
-
-        player.setBounce(0.2);
+        player = this.physics.add.sprite(100, 450, 'aladdin');
+        player.setBounce(0);
         player.setCollideWorldBounds(true);
 
         this.anims.create({
             key: 'left',
-            frames: this.anims.generateFrameNumbers('dude', { start: 0, end: 3 }),
+            frames: this.anims.generateFrameNames('aladdin', { prefix: 'aladdin_', end: 1, zeroPad: 4 }),
             frameRate: 10,
             repeat: -1
         });
 
-        this.anims.create({
-            key: 'turn',
-            frames: [ { key: 'dude', frame: 4 } ],
-            frameRate: 20
-        });
-
+        this.anims.create({ key: 'turn', frames: this.anims.generateFrameNames('aladdin', { prefix: 'aladdin_', end: 0, zeroPad: 4 }), repeat: -1 });
         this.anims.create({
             key: 'right',
-            frames: this.anims.generateFrameNumbers('dude', { start: 5, end: 8 }),
+            frames: this.anims.generateFrameNames('aladdin', { prefix: 'aladdin_',start:10, end: 2, zeroPad: 4 }),
             frameRate: 10,
             repeat: -1
         });
@@ -126,22 +92,20 @@ const loadAssets = (images, spritesheet, baseURL) =>{
         if (cursors.left.isDown)
         {
             player.setVelocityX(-160);
-
-            player.anims.play('left', true);
+            player.flipX = true
+            player.anims.play('right', true);
         }
         else if (cursors.right.isDown)
         {
             player.setVelocityX(160);
-
+            player.flipX = false
             player.anims.play('right', true);
         }
         else
         {
             player.setVelocityX(0);
-
             player.anims.play('turn');
         }
-
         if (cursors.up.isDown && player.body.touching.down)
         {
             player.setVelocityY(-330);

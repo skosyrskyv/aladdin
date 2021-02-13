@@ -1,4 +1,4 @@
-
+import * as Phaser from '../node_modules/phaser/dist/phaser'
 
 const baseURL = 'src/'
 
@@ -34,14 +34,9 @@ const spritesheet = [
 
 // const loadAssets = (images, spritesheet, baseURL) =>{
 //     this.load.setBaseURL(baseURL)
-function preload (){
+export function func () {
     images.map(image => {
         this.load.image(image.name, image.source);
     })
-
-    spritesheet.map(sprites => {
-        this.load.spritesheet(sprites.name, sprites.source, sprites.size);
-    })
 }
 
-// }
